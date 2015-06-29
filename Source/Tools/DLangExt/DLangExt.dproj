@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{0b228668-b882-48df-bd70-f1232858a375}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>..\..\..\bin\DLangExt.exe</DCC_DependencyCheckOutputName>
+    <MainSource>DLangExt.dpr</MainSource>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_Define>DEBUG</DCC_Define>
+    <DCC_ExeOutput>..\..\..\bin</DCC_ExeOutput>
+    <DCC_DcuOutput>..\..\..\lib\DLangExt</DCC_DcuOutput>
+    <DCC_ObjOutput>..\..\..\lib\DLangExt</DCC_ObjOutput>
+    <DCC_HppOutput>..\..\..\lib\DLangExt</DCC_HppOutput>
+    <DCC_BplOutput>..\..\..\bin</DCC_BplOutput>
+    <DCC_DcpOutput>..\..\..\lib\DLangExt</DCC_DcpOutput>
+    <DCC_UnitSearchPath>$(BDS)\lib\Debug;$(BDS)\Lib\Debug\Indy10;..\..\..\lib\DLangExt</DCC_UnitSearchPath>
+    <DCC_ResourcePath>$(BDS)\lib\Debug;$(BDS)\Lib\Debug\Indy10;..\..\..\lib\DLangExt</DCC_ResourcePath>
+    <DCC_ObjPath>$(BDS)\lib\Debug;$(BDS)\Lib\Debug\Indy10;..\..\..\lib\DLangExt</DCC_ObjPath>
+    <DCC_IncludePath>$(BDS)\lib\Debug;$(BDS)\Lib\Debug\Indy10;..\..\..\lib\DLangExt</DCC_IncludePath>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+      <BorlandProject>
+        <Delphi.Personality>
+          <Parameters>
+            <Parameters Name="UseLauncher">False</Parameters>
+            <Parameters Name="LoadAllSymbols">True</Parameters>
+            <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+            <Parameters Name="RunParams"></Parameters>
+            <Parameters Name="DebugCWD"></Parameters>
+          </Parameters>
+          <VersionInfo>
+            <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+            <VersionInfo Name="AutoIncBuild">False</VersionInfo>
+            <VersionInfo Name="MajorVer">1</VersionInfo>
+            <VersionInfo Name="MinorVer">0</VersionInfo>
+            <VersionInfo Name="Release">0</VersionInfo>
+            <VersionInfo Name="Build">0</VersionInfo>
+            <VersionInfo Name="Debug">False</VersionInfo>
+            <VersionInfo Name="PreRelease">False</VersionInfo>
+            <VersionInfo Name="Special">False</VersionInfo>
+            <VersionInfo Name="Private">False</VersionInfo>
+            <VersionInfo Name="DLL">False</VersionInfo>
+            <VersionInfo Name="Locale">1031</VersionInfo>
+            <VersionInfo Name="CodePage">1252</VersionInfo>
+          </VersionInfo>
+          <VersionInfoKeys>
+            <VersionInfoKeys Name="CompanyName"/>
+            <VersionInfoKeys Name="FileDescription"/>
+            <VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+            <VersionInfoKeys Name="InternalName"/>
+            <VersionInfoKeys Name="LegalCopyright"/>
+            <VersionInfoKeys Name="LegalTrademarks"/>
+            <VersionInfoKeys Name="OriginalFilename"/>
+            <VersionInfoKeys Name="ProductName"/>
+            <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+            <VersionInfoKeys Name="Comments"/>
+          </VersionInfoKeys>
+          <Source>
+            <Source Name="MainSource">DLangExt.dpr</Source>
+          </Source>
+        </Delphi.Personality>
+      </BorlandProject>
+    </BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="DLangExt.dpr">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="..\DLangExtImport.pas" />
+  </ItemGroup>
+</Project>

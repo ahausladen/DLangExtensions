@@ -1,0 +1,74 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{045486b6-9dd7-424f-9ee9-e3788cfe4731}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="Source\DLangExtensions.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="Source\Tools\DLangExt\DLangExt.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="Source\Tools\Dcc32le\Dcc32le.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\CompileInterceptor\Source\CompileInterceptorW.dproj">
+				<Dependencies/>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<BorlandProject>
+					<Default.Personality/>
+				</BorlandProject>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="DLangExtensions">
+			<MSBuild Projects="Source\DLangExtensions.dproj"/>
+		</Target>
+		<Target Name="DLangExtensions:Clean">
+			<MSBuild Targets="Clean" Projects="Source\DLangExtensions.dproj"/>
+		</Target>
+		<Target Name="DLangExtensions:Make">
+			<MSBuild Targets="Make" Projects="Source\DLangExtensions.dproj"/>
+		</Target>
+		<Target Name="DLangExt">
+			<MSBuild Projects="Source\Tools\DLangExt\DLangExt.dproj"/>
+		</Target>
+		<Target Name="DLangExt:Clean">
+			<MSBuild Targets="Clean" Projects="Source\Tools\DLangExt\DLangExt.dproj"/>
+		</Target>
+		<Target Name="DLangExt:Make">
+			<MSBuild Targets="Make" Projects="Source\Tools\DLangExt\DLangExt.dproj"/>
+		</Target>
+		<Target Name="Dcc32le">
+			<MSBuild Projects="Source\Tools\Dcc32le\Dcc32le.dproj"/>
+		</Target>
+		<Target Name="Dcc32le:Clean">
+			<MSBuild Targets="Clean" Projects="Source\Tools\Dcc32le\Dcc32le.dproj"/>
+		</Target>
+		<Target Name="Dcc32le:Make">
+			<MSBuild Targets="Make" Projects="Source\Tools\Dcc32le\Dcc32le.dproj"/>
+		</Target>
+		<Target Name="CompileInterceptorW">
+			<MSBuild Projects="..\CompileInterceptor\Source\CompileInterceptorW.dproj"/>
+		</Target>
+		<Target Name="CompileInterceptorW:Clean">
+			<MSBuild Targets="Clean" Projects="..\CompileInterceptor\Source\CompileInterceptorW.dproj"/>
+		</Target>
+		<Target Name="CompileInterceptorW:Make">
+			<MSBuild Targets="Make" Projects="..\CompileInterceptor\Source\CompileInterceptorW.dproj"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="DLangExtensions;DLangExt;Dcc32le;CompileInterceptorW"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="DLangExtensions:Clean;DLangExt:Clean;Dcc32le:Clean;CompileInterceptorW:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="DLangExtensions:Make;DLangExt:Make;Dcc32le:Make;CompileInterceptorW:Make"/>
+		</Target>
+		<Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+	</Project>

@@ -1,0 +1,531 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>DLangExtensions</title>
+<style type="text/CSS">
+<!--
+body {padding: 0px 0px 0px 26px;background: #ffffff; color: #000000;font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 9pt; line-height: 12pt;}
+h1, h2, h3, h4 {font-family: Verdana, Arial, Helvetica, sans-serif;margin-left: -6px;margin-top: .5em;margin-bottom: .5em; }
+h1 {font-size: 160%;}
+h2 {font-size: 145%;}
+h3 {font-size: 130%;}
+h4 {font-size: 115%;}
+h5 {font-size: 105%;}
+hr {align:"right";color:"#000080";noshade;}
+ul p, ol p, dl p {margin-left: 0em;}
+p {margin-top: .6em;margin-bottom:.6em; text-align: justify;}
+dl {margin-top: 0em;}
+dd {margin-bottom: 0em;margin-left: 1.9em;}
+dt {margin-top: .6em; }
+ul, ol {padding-left: 1em;margin-top: .6em;margin-bottom: 0em;}
+ol {margin-left: 1.9em; }	
+ul {list-style-type: disc;margin-left: 1.9em; }
+li {margin-bottom: .6em;}
+ul ol, ol ol {list-style-type: lower-alpha;}
+pre {margin-top: .6em;margin-bottom: .6em; }
+pre,code {font-family: Courier New, Courier, mono;color: black;}
+table {margin-top: .6em;margin-bottom: .3em;}
+th {padding: 4px 8px;background: #cccccc;text-align: left;font-size: 70%;vertical-align: bottom;height: 25px;}
+td {padding: 4px 8px;background: #ffffff;vertical-align: top;font-size: 70%;height: 25px;}
+blockquote {margin-left: 3.8em;margin-right: 3.8em;margin-top: .6em;margin-bottom: .6em;}
+sup {text-decoration: none;font-size: smaller; }
+a:link {color: #0066ff;}
+a:visited {color: #0066ff;}
+a:hover {color: #cc9900;}
+
+pre.sourcecode { color: black; border: 1px solid silver; padding: 5px; width: 800px; background-color: #fdfdfd; }
+code.keyword { font-weight: bold; color: navy; }
+code.comment { font-style: italic; color: green; }
+code.quote { color: blue; }
+div.sourcecode { color: black; border: 1px solid silver; padding: 5px; width: 800px; background-color: #fdfdfd; font-family: Courier New, Courier, mono;}
+
+span.comment, span.pas1-comment { color: green; }
+span.string, span.pas1-number, span.pas1-string { color: blue; }
+span.keyword, span.pas1-reservedword { color: navy; font-weight: bold; }
+
+b.extension { color: navy; font-size: 11pt; }
+td.header { background-color: #f0f0f0; }
+div.splitter { height: 25px; }
+// -->
+</style>
+</head>
+<body>
+<h1>DLangExtensions</h1>
+<h3></h3>
+<hr>
+<h2>About</h2>
+<p>The DLangExtensions adds new language constructs to the ObjectPascal language. This is achieved by using 
+a preprocessor for the IDE and the command line compiler.
+</p>
+<p><b style="color: red;">Use at your own risk.</b></p>
+<h2>Tools</h2>
+<ul>
+ <!--<li><b>dcc32le.exe</b>
+ <br/>This command line tool is the preprocessor for the command line compiler dcc32.exe.
+ It can be renamed to dcc32.exe or dccil.exe to replace then actual compiler that then
+ must be renamed to dcc32compiler.exe or dccilcompiler.exe.</li>-->
+ <li><b>DLangExt.exe</b>
+ <br/>This tool converts the language extensions to real ObjectPascal code. It can be used to revert to normal ObjectPascal files.</li>
+ <li><b>DLangExtensions.dll</b>
+ <br/>This library is the IDE plugin. It is also used by the
+ command line tools.</li>
+ <li><b>CompileInterceptorW.dll</b>
+ <br/>This library hooks the IDE compiler and is used by DLangExtensions.dll.</li>
+</ul>
+</p>
+<p>&nbsp;</p>
+
+<h2>How to install (by hand)</h2>
+<ol>
+ <!--<li>Rename the $(BDS)\bin\dcc32.exe to $(BDS)\bin\dcc32compiler.exe</li>
+ <li>Copy dcc32le.exe to $(BDS)\bin and rename it to dcc32.exe (this adds the new language constructs to the command line compiler)</li>-->
+ <li>Copy DLangExtensions.dll and the CompileInterceptorW.dll to $(BDS)\bin
+ <li>Optional: Copy DLangExt.exe to $(BDS)\bin
+ <li>Open Regedit and navigate to the HKCU\Software\CodeGear\BDS\6.0\Experts key (you must create the "Experts" sub-key if it doesn't exist)
+ <li>Add a new String-Value to the registry key with the name "DLangExtensions" and the value "Your BDS Directory\bin\DLangExtensions.dll".
+</ol>
+<p>&nbsp;</p>
+
+
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<h2>Available Language Extensions</h2>
+<ul>
+ <li><b class="extension">File Macros</b> <a href="#FileMacros">(details)</a><br />
+ Some macros to get the current file name, line, time and project name.</li>
+<!-- <li><b class="extension">Result-Exit</b> <a href="#ResultExit">(details)</a><br />
+ Extends the Exit statement by adding an optional result-value parameter.</li>-->
+ <li><b class="extension">case-string-of</b> <a href="#CaseStringOf">(details)</a><br />
+ Extends the case-of by adding the ability to use strings.</li>
+ <li><b class="extension">Extended for-in loop</b> <a href="#ForIn">(details)</a><br />
+ Extends the for-in loop with inline variable declaration, predefined enumerators and more.</li>
+ <li><b class="extension">Multiline Strings</b> <a href="#MultilineStrings">(details)</a><br />
+ Adds the ability to use multiline strings without fighing with line breaks.</li>
+ <li><b class="extension">Unicode Switch</b>  <a href="#UniSwitch">(details)</a><br />
+ Adds the ability change the meaning of "string", "Char" and "PChar" back to ANSI types.</li>
+</ul>
+
+<p>&nbsp;</p>
+
+
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<h2>Language Extensions in detail</h2>
+<ul>
+
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+  <li><a name="FileMacros"></a><b class="extension">File Macros</b>
+<blockquote>
+<p>This extension supports some file information macros.</p>
+<table border="0" cellspacing="0" cellpadding="0">
+ <thead><td class="header">Macro</td><td class="header"></td><td class="header">Datatype</td><td class="header">Description</td></thead>
+ <tr><td><b>$__FILE__   </b></td><td></td><td><i>string</i>   </td><td>full qualified filename of the current file</td></tr>
+ <tr><td><b>$__PROJECT__</b></td><td></td><td><i>string</i>   </td><td>name of the project (dpr/dpk) without path and without suffix</td></tr>
+ <tr><td><b>$__LINE__   </b></td><td></td><td><i>Integer</i>  </td><td>current source code line</td></tr>
+ <tr><td><b>$__TIME__   </b></td><td></td><td><i>TDateTime</i></td><td>compilation timestamp</td></tr>
+</table>
+
+<p>&nbsp;</p>
+<h4>Example:</h4>
+<div class="sourcecode">
+<span class="keyword">procedure</span> TFormMain.BtnDemoClick(Sender: TObject);<br />
+<span class="keyword">begin</span><br />
+&nbsp;&nbsp;ShowMessage(<span class="string">'Filename: '</span> + $__FILE__);<br />
+&nbsp;&nbsp;ShowMessage(<span class="string">'Project: '</span> + $__PROJECT__);<br />
+&nbsp;&nbsp;ShowMessage(<span class="string">'Line: '</span> + IntToStr($__LINE__));<br />
+&nbsp;&nbsp;ShowMessage(<span class="string">'Time: '</span> + DateTimeToStr($__TIME__));<br />
+<span class="keyword">end</span>;
+</div>
+</blockquote>
+
+<div class="splitter"></div>
+  </li>
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+
+
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!--  <li><a name="ResultExit"></a><b class="extension">Result-Exit</b>
+<blockquote>
+<p>The Result-Exit allows you to specify the result value and to exit the method within
+one statement. It works like the C++ "return" statement.</p>
+<table border="0" cellspacing="0" cellpadding="0">
+ <thead><td class="header">Syntax</td></thead>
+ <tr><td><b>Exit</b>(<i>return-expression</i>);</td></tr>
+</table>
+
+<p>&nbsp;</p>
+<h4>Example:</h4>
+<div class="sourcecode">
+<span class="keyword">function</span> GetName(Obj: TObject): <span class="keyword">string</span>;<br />
+<span class="keyword">begin</span><br />
+&nbsp;&nbsp;<span class="keyword">if</span> Obj = <span class="keyword">nil then</span><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Exit(<span class="string">'no object'</span>);<br />
+&nbsp;&nbsp;...<br />
+<span class="keyword">end</span>;
+</div>
+</blockquote>
+
+<div class="splitter"></div>
+  </li>-->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+
+
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+
+  <li><a name="CaseStringOf"></a><b class="extension">case-string-of</b>
+<blockquote>
+<p>The case-string-of extension introduces a case-of that uses strings instead of ordinal-values.</p>
+<table border="0" cellspacing="0" cellpadding="0">
+ <thead><td class="header">Syntax</td></thead>
+ <tr><td><b>case string</b>(<i>string-expression</i>) <b>of</b><br />
+ &nbsp;&nbsp;<i>string-literal/string-constant</i> [, <i>string-literal/string-constant</i> ...]: <i>statement;</i><br />
+ &nbsp;&nbsp;...<br />
+ [<b>else</b><br />
+ &nbsp;&nbsp;<i>statements</i>]<br />
+ <b>end</b>;
+</table>
+<p>The case-string-of extension automatically generates an include file. This file is included immediatelly after 
+the <b>implementation</b> keyword or after the implementation's <b>uses</b> list. But it is possible
+to move the automatically inserted $INCLUDE by using the "{$INCLUDE CASE-STRING-OF}" compiler
+directive. The "{$INCLUDE CASE-STRING-OF}" may be also necessary if the implementation's <b>uses</b> list contains a complicated
+$IFDEF/$IF condition.</p>
+<p>You can also use <b>case AnsiString(expression) of</b> or <b>case WideString(expression) of</b> to reduce string conversion.
+
+<p>&nbsp;</p>
+<h4>Limitations</h4>
+<p>
+<ul>
+ <li><s>Only literal strings and contants are allowed.</s></li>
+ <li>Constants or string concatenations make the case-string-of slower because no hash table
+    can be used.</li>
+ <li>The comparision is case sensitive.</li>
+</ul>
+</p>
+
+
+<p>&nbsp;</p>
+<h4>Example:</h4>
+<div class="sourcecode">
+<pre><code><span style="font: 10pt Courier New;"><span class="pas1-reservedword">procedure</span><span class="pas1-space"> TFormExecCmd.btnExecuteClick(Sender: TObject);
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  </span><span class="pas1-reservedword">case</span><span class="pas1-space"> </span><span class="pas1-reservedword">string</span><span class="pas1-space">(edtCommand.Text)</span><span class="pas1-reservedword">of
+</span><span class="pas1-space">    </span><span class="pas1-string">'Hallo'</span><span class="pas1-symbol">, </span><span class="pas1-string">'Hello'</span><span class="pas1-symbol">:
+      ShowMessage(</span><span class="pas1-string">'Hallo'</span><span class="pas1-symbol">);
+    </span><span class="pas1-string">'Exit'</span><span class="pas1-symbol">:
+      Close;
+  </span><span class="pas1-reservedword">else
+</span><span class="pas1-space">    ShowMessage(</span><span class="pas1-string">'Unknown command: '</span><span class="pas1-space"> + edtCommand.Text);
+  </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+</span></span></code></pre>
+</div>
+</blockquote>
+
+<div class="splitter"></div>
+  </li>
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+
+
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+
+  <li><a name="ForIn"></a><b class="extension">Extended for-in loop</b>
+<blockquote>
+<p>The extended for-in loop allows you to iterator over an array or every object that has a Count property and 
+a default array-property. Furthermore it can be used with classes that have a GetEnumerator method. The for-in iterator
+variable's scope is limited to the for-in loop.</p>
+<table border="0" cellspacing="0" cellpadding="0">
+ <thead><td class="header">Syntax</td><td class="header"></td><td class="header">Description</td></thead>
+ <tr><td><b>for</b> I: <i>DataType</i> <b>in</b> List[] <b>do</b> ;</td><td></td><td><i>List</i> is an instance of a class that has a Count property and a default array-property (like TList, TStrings).<br />This is <b>not type safe</b> because it uses a hard typecast to <i>DataType</i></td></tr>
+ <tr><td><b>for object</b> C: <i>ClassType</i> <b>in</b> List[] <b>do</b> ;</td><td></td><td><i>List</i> is an instance of a class that has a Count property and a default array-property (like TList, TStrings).<br />This is <b>type safe</b> because it uses the as-operator for the typecast to <i>ClassType</i></td></tr>
+ <tr><td><b>for</b> I: <i>DataType</i> <b>in array</b> List <b>do</b> ;</td><td></td><td><i>List</i> is a static/dynamic array or a string.<br />This is <b>not type safe</b> because it uses a hard typecast to <i>DataType</i></td></tr>
+ <tr><td><b>for object</b> C: <i>ClassType</i> <b>in array</b> List <b>do</b> ;</td><td></td><td><i>List</i> is a static/dynamic array or a string.<br />This is <b>type safe</b> because it uses the as-operator for the typecast to <i>ClassType</i></td></tr>
+ <tr><td><b>for</b> I: <i>DataType</i> <b>in</b> List <b>do</b> ;</td><td></td><td><i>List</i> is an instance of a class that has a GetEnumerator method.<br />This is <b>not type safe</b> because it uses a hard typecast to <i>DataType</i></td></tr>
+ <tr><td><b>for object</b> C: <i>ClassType</i> <b>in</b> List <b>do</b> ;</td><td></td><td><i>List</i> is an instance of a class that has a GetEnumerator method.<br />This is <b>type safe</b> because it uses the as-operator for the typecast to <i>ClassType</i></td></tr>
+</table>
+<p>The for-in extension automatically generates an include file. This file is included immediatelly after 
+the <b>implementation</b> keyword or after the implementation's <b>uses</b> list. This restricts the usage of
+the iterator-types to those that are declared in the interface block or in the imported units. But it is possible
+to move the automatically inserted $INCLUDE by using the "{$INCLUDE FOR-IN}" compiler
+directive. The "{$INCLUDE FOR-IN}" may be also necessary if the implementation's <b>uses</b> list contains a complicated
+$IFDEF/$IF condition.</p>
+
+<p>&nbsp;</p>
+<h4>GetEnumerator</h4>
+<p>The GetEnumerator method must return a new instance of a class that has the following methods:
+<table border="0" cellspacing="0" cellpadding="0">
+ <thead><td class="header">Enumerator methods</td></thead>
+ <tr><td><b>function</b> GetCurrent: DataType;</td>
+ <tr><td><b>function</b> MoveNext: Boolean;</td>
+</table>
+</p>
+
+<p>&nbsp;</p>
+<h4>Limitations</h4>
+<p>
+<ul>
+ <li>The "<b>for</b> [<b>object</b>] It: DataType <b>in</b> List[]" and the
+"<b>for</b> [<b>object</b>] It: DataType <b>in array</b> List" loops access the <i>List</i> very often. So the <i>List</i> should be a
+variable an not a function call. This does not apply to the GetEnumerator for-in loops.</li>
+ <li>If the <i>DataType</i> is an interface, you should set the iterator variable to <b>NIL</b> after each iteration.
+ Otherwise you wouldn't be able to clear the interface after the for-in loop has finished because the iterator
+ variable isn't visible anymore. The iterator variable will be always cleared when the surrounding function
+ is left.</li>
+</ul>
+</p>
+
+
+<p>&nbsp;</p>
+<h4>Example:</h4>
+<div class="sourcecode">
+<pre><code><span class="pas1-reservedword">var
+</span><span class="pas1-space">  List: TList;
+  Arr: </span><span class="pas1-reservedword">array</span><span class="pas1-symbol">[</span><span class="pas1-number">0</span><span class="pas1-symbol">..</span><span class="pas1-number">1</span><span class="pas1-symbol">] </span><span class="pas1-reservedword">of</span><span class="pas1-space"> AnsiChar;
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  Arr[</span><span class="pas1-number">0</span><span class="pas1-symbol">] := </span><span class="pas1-string">'a'</span><span class="pas1-symbol">;
+  Arr[</span><span class="pas1-number">1</span><span class="pas1-symbol">] := </span><span class="pas1-string">'z'</span><span class="pas1-symbol">;
+  </span><span class="pas1-reservedword">for</span><span class="pas1-space"> Value: Byte </span><span class="pas1-reservedword">in</span><span class="pas1-space"> </span><span class="pas1-reservedword">array</span><span class="pas1-space"> Arr </span><span class="pas1-reservedword">do</span><span class="pas1-space"> </span><span class="pas1-comment">// hard typecast to Byte
+</span><span class="pas1-space">    Memo1.Lines.Add(IntToStr(Value));
+
+  List := TList.Create;
+  </span><span class="pas1-reservedword">try
+</span><span class="pas1-space">    List.Add(Pointer(</span><span class="pas1-number">1</span><span class="pas1-symbol">));
+    List.Add(Pointer(</span><span class="pas1-number">2</span><span class="pas1-symbol">));
+    List.Add(Pointer(</span><span class="pas1-number">4</span><span class="pas1-symbol">));
+    List.Add(Pointer(</span><span class="pas1-number">8</span><span class="pas1-symbol">));
+    List.Add(Pointer(</span><span class="pas1-number">16</span><span class="pas1-symbol">));
+
+    </span><span class="pas1-reservedword">for</span><span class="pas1-space"> Value: Integer </span><span class="pas1-reservedword">in</span><span class="pas1-space"> List[] </span><span class="pas1-reservedword">do</span><span class="pas1-space"> </span><span class="pas1-comment">// hard typecast to Integer
+</span><span class="pas1-space">      Memo1.Lines.Add(IntToStr(Value));
+  </span><span class="pas1-reservedword">finally
+</span><span class="pas1-space">    List.Free;
+  </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;</span>
+</code></pre>
+</div>
+
+<div class="splitter"></div>
+<div class="sourcecode">
+<pre><code><span class="pas1-reservedword">var
+</span><span class="pas1-space">  List: TObjectList;
+  I: Integer;
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  List := TObjectList.Create(False);
+  </span><span class="pas1-reservedword">try
+</span><span class="pas1-space">    </span><span class="pas1-reservedword">for</span><span class="pas1-space"> I := </span><span class="pas1-number">0</span><span class="pas1-space"> </span><span class="pas1-reservedword">to</span><span class="pas1-space"> ComponentCount - </span><span class="pas1-number">1</span><span class="pas1-space"> </span><span class="pas1-reservedword">do
+</span><span class="pas1-space">      List.Add(Components[I]);
+
+    </span><span class="pas1-reservedword">for</span><span class="pas1-space"> </span><span class="pas1-reservedword">object</span><span class="pas1-space"> c: TComponent </span><span class="pas1-reservedword">in</span><span class="pas1-space"> List[] </span><span class="pas1-reservedword">do</span><span class="pas1-space"> </span><span class="pas1-comment">// type safe (uses as-operator)
+</span><span class="pas1-space">    </span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">      Memo1.Lines.Add(c.Name);
+      </span><span class="pas1-reservedword">for</span><span class="pas1-space"> c: TComponent </span><span class="pas1-reservedword">in</span><span class="pas1-space"> List[] </span><span class="pas1-reservedword">do </span><span class="pas1-comment">// hard typecast to TComponent
+</span><span class="pas1-space">        Memo1.Lines.Add(c.Name);
+    </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+  </span><span class="pas1-reservedword">finally
+</span><span class="pas1-space">    List.Free;
+  </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;</span>
+</code></pre>
+</div>
+
+<div class="splitter"></div>
+<div class="sourcecode">
+<pre><code><span class="pas1-reservedword">type
+</span><span class="pas1-space">  TObjectListEnumerator = </span><span class="pas1-reservedword">class
+</span><span class="pas1-space">  </span><span class="pas1-reservedword">private
+</span><span class="pas1-space">    FIndex: Integer;
+    FList: TObjectList;
+  </span><span class="pas1-reservedword">public
+</span><span class="pas1-space">    </span><span class="pas1-reservedword">constructor</span><span class="pas1-space"> Create(AList: TObjectList);
+    </span><span class="pas1-reservedword">function</span><span class="pas1-space"> GetCurrent: TObject;
+    </span><span class="pas1-reservedword">function</span><span class="pas1-space"> MoveNext: Boolean;
+    </span><span class="pas1-reservedword">property</span><span class="pas1-space"> Current: TObject </span><span class="pas1-reservedword">read</span><span class="pas1-space"> GetCurrent;
+  </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+
+  TObjectListEx = </span><span class="pas1-reservedword">class</span><span class="pas1-symbol">(TObjectList)
+  </span><span class="pas1-reservedword">public
+</span><span class="pas1-space">    </span><span class="pas1-reservedword">function</span><span class="pas1-space"> GetEnumerator: TObjectListEnumerator;
+  </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+
+</span><span class="pas1-comment">{ TObjectListEnumerator }
+
+</span><span class="pas1-reservedword">constructor</span><span class="pas1-space"> TObjectListEnumerator.Create(AList: TObjectList);
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  </span><span class="pas1-reservedword">inherited</span><span class="pas1-space"> Create;
+  FIndex := -</span><span class="pas1-number">1</span><span class="pas1-symbol">;
+  FList := AList;
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+
+</span><span class="pas1-reservedword">function</span><span class="pas1-space"> TObjectListEnumerator.GetCurrent: TObject;
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  Result := FList[FIndex];
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+
+</span><span class="pas1-reservedword">function</span><span class="pas1-space"> TObjectListEnumerator.MoveNext: Boolean;
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  Result := FIndex &lt; FList.Count - </span><span class="pas1-number">1</span><span class="pas1-symbol">;
+  </span><span class="pas1-reservedword">if</span><span class="pas1-space"> Result </span><span class="pas1-reservedword">then
+</span><span class="pas1-space">    Inc(FIndex);
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+
+</span><span class="pas1-comment">{ TObjectListEx }
+
+</span><span class="pas1-reservedword">function</span><span class="pas1-space"> TObjectListEx.GetEnumerator: TObjectListEnumerator;
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  Result := TObjectListEnumerator.Create(Self);
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+</span>
+
+
+<span class="pas1-reservedword">var
+</span><span class="pas1-space">  ObjList: TObjectListEx;
+  I: Integer;
+</span><span class="pas1-reservedword">begin
+</span><span class="pas1-space">  ObjList := TObjectListEx.Create(False);
+  </span><span class="pas1-reservedword">try
+</span><span class="pas1-space">    </span><span class="pas1-reservedword">for</span><span class="pas1-space"> I := </span><span class="pas1-number">0</span><span class="pas1-space"> </span><span class="pas1-reservedword">to</span><span class="pas1-space"> ComponentCount - </span><span class="pas1-number">1</span><span class="pas1-space"> </span><span class="pas1-reservedword">do
+</span><span class="pas1-space">      ObjList.Add(Components[I]);
+
+    </span><span class="pas1-reservedword">for</span><span class="pas1-space"> </span><span class="pas1-reservedword">object</span><span class="pas1-space"> c: TComponent </span><span class="pas1-reservedword">in</span><span class="pas1-space"> ObjList </span><span class="pas1-reservedword">do
+</span><span class="pas1-space">      Memo1.Lines.Add(c.Name);
+  </span><span class="pas1-reservedword">finally
+</span><span class="pas1-space">    ObjList.Free;
+  </span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;
+</span><span class="pas1-reservedword">end</span><span class="pas1-symbol">;</span>
+</code></pre>
+</div>
+</blockquote>
+
+<div class="splitter"></div>
+  </li>
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+
+
+
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+  <li><a name="MultilineStrings"></a><b class="extension">Multiline Strings</b>
+<blockquote>
+<p>A multiline string is started by "&lt;&lt;" followed (without a space) by a user defined
+terminator token which must not contain a space and is ended by a line break or a single line comment. The next
+line is the first multiline string line. A multiline string is terminated by a new line
+that starts with the terminator token. If this token is indented, the indention is
+removed from all multiline string lines. This makes it possible to indent the whole string
+without having the indention in the resulting string.
+The "#&lt;code&gt;" token has a special meaning in the multiline string. It inlines source
+code into the string what is technically just a string concatination, so the lvalue of the expression
+must be a string. A "#" char must be escaped by prepanding an additional "#". Otherwise
+it would indicate code inlining.</p>
+
+<p>&nbsp;</p>
+<h4>Examples:</h4>
+<div class="sourcecode">
+S := &lt;&lt;MARKER<br />
+multi line<br />
+string<br />
+MARKER;<br />
+<br />
+ShowMessage(&lt;&lt;@@<br />
+&nbsp;&nbsp;multi line<br />
+&nbsp;&nbsp;string<br />
+&nbsp;&nbsp;@@); <span class="comment">// this removes the two space indention from the multi line string</span><br />
+<br />
+S := &lt;&lt;@@ <span class="comment">// comments are allowed in this line</span><br />
+##1. i = #&lt; IntToStr(i) &gt;<br />
+##2. Value = #&lt; VarToStr(Value) &gt;<br />
+@@;</div>
+<br />
+<br />The above examples are expanded to the following code:
+<br />
+<br />
+<div class="sourcecode">
+S := <br />
+<span class="string">'multi line'#13#10+</span><br />
+<span class="string">'string'</span><br />
+;
+<br />
+ShowMessage(<br />
+&nbsp;&nbsp;<span class="string">'multi line'#13#10+</span><br />
+&nbsp;&nbsp;<span class="string">'string'</span><br />
+&nbsp;&nbsp;); <span class="comment">// this removes the two space indention from the multi line string</span><br />
+<br />
+S :=  <span class="comment">// comments are allowed in this line</span><br />
+<span class="string">'#1. i = '</span> + IntToStr(i) + <span class="string">''#13#10</span>+<br />
+<span class="string">'#2. Value = '</span> + VarToStr(Value) + <span class="string">''#13#10</span><br />
+;</div>
+</blockquote>
+
+<div class="splitter"></div>
+  </li>
+
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+
+
+  <li><a name="UniSwitch"></a><b class="extension">Unicode Switch</b>
+<blockquote>
+<p>The Unicode Switch changes the meaning of "string", "Char" and "PChar" to "RawByteString", "AnsiChar" and "PAnsiChar".
+It also typecasts all constant strings and constant characters to "RawByteString" and "AnsiChar". This reduces the number of implicit
+typecasts by the compiler and the ANSI functions are called and not the Unicode versions that the
+compiler prefers.<br /></p>
+
+<br />
+<h4>Enabling/Disabling the ANSI mode</h4>
+<p>The ANSI mode is activated by the new ANSISTRINGS switch.</p>
+
+<div class="sourcecode">
+<span class="comment">{%ANSISTRINGS ON/ACTIVE/OFF}</span>
+</div>
+<p><i>The switch uses the %-character instead of the $-character because otherwise Error Insight will show you errors.</i></p>
+<p>
+<table border="0" cellspacing="0" cellpadding="0">
+ <thead><tr><td class="header">Switch</td><td class="header"></td><td class="header">Description</td></tr></thead>
+ <tr><td><b>ON  </b></td><td></td><td>enables AnsiStrings, undefines UNICODE, adds alias types for Code Insight</td></tr>
+ <tr><td><b>ACTIVE</b></td><td></td><td>enables AnsiStrings, undefines UNICODE (CodeInsight and Compiler column-info can be wrong)</td></tr>
+ <tr><td><b>OFF   </b></td><td></td><td>disables AnsiStrings, defines UNICODE</td></tr>
+</table>
+</p>
+<br />
+<h4>Limitations</h4>
+<p>
+<ul>
+ <li>The <b>{%ANSISTRINGS ON}</b> must be inserted below the "uses" clause in the "interface" or
+     "implementation" block. Thus it can't be used between "begin" and "end".
+	 This is because the switch must declare type aliases to keep the column information correct<br />
+     <b>{%ANSISTRINGS ACTIVE}</b> doesn't have this limitation.</li>
+ <li>The switch cannot be IFDEFed. IFDEFs are ignored.</li>
+ <li>The switch does not "ansify" your code it just changes the meaning of "string", "Char" and "PChar"
+      to "RawByteString", "AnsiChar" and "PAnsiChar". Nothing more, nothing less.</li>
+</ul>
+</p>
+</blockquote>
+
+<div class="splitter"></div>
+  </li>
+
+</ul>
+</body>
+</html>

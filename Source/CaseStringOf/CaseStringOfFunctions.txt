@@ -1,0 +1,250 @@
+{$IFOPT Q+}
+  {$DEFINE _XXX_OVERFLOW_CHECKS_ON}
+{$ENDIF}
+
+{$IFOPT R+}
+  {$DEFINE _XXX_RANGE_CHECKS_ON}
+{$ENDIF}
+
+{$Q-,R-}
+{------------------- UNICODE STRINGS ---------------------}
+
+function zzInternalCaseStringOf(const S: UnicodeString; HashTbl: Pointer; H: Integer): Integer;
+type
+  zzTCaseStringOfHashItem = record
+    Hash: Cardinal;
+    Value: UnicodeString;
+  end;
+
+  PHashTbl = ^THashTbl;
+  THashTbl = array[0..MaxInt div SizeOf(zzTCaseStringOfHashItem) - 1] of zzTCaseStringOfHashItem;
+
+  function HashString(const S: UnicodeString): Cardinal;
+  var
+    I: Integer;
+  begin
+    Result := Length(S);
+    if Result > 0 then
+      for I := 0 to Length(S) - 1 do
+        Inc(Result, Ord(S[I + 1]));
+  end;
+
+  function FindIndex(Hash: Cardinal; HashTbl: PHashTbl; H: Integer): Integer;
+  var
+    L, C: Integer;
+  begin
+    L := 0;
+    while L <= H do
+    begin
+      Result := (L + H) shr 1;
+      C := HashTbl[Result].Hash - Hash;
+      if C < 0 then
+        L := Result + 1
+      else
+      begin
+        if C = 0 then
+          Exit;
+        H := Result - 1;
+      end;
+    end;
+    Result := -1;
+  end;
+
+  function FindInRange(Hash: Cardinal; HashTbl: PHashTbl; Index: Integer; const S: UnicodeString; H: Integer): Integer;
+  begin
+    for Result := Index - 1 downto 0 do
+      if HashTbl[Result].Hash <> Hash then
+        Break
+      else if HashTbl[Result].Value = S then
+        Exit;
+
+    for Result := Index + 1 to H do
+      if HashTbl[Result].Hash <> Hash then
+        Break
+      else if HashTbl[Result].Value = S then
+        Exit;
+    Result := -1;
+  end;
+
+var
+  Hash: Cardinal;
+begin
+  Hash := HashString(S);
+  Result := FindIndex(Hash, PHashTbl(HashTbl), H);
+  if Result <> -1 then
+    if PHashTbl(HashTbl)[Result].Value <> S then
+      Result := FindInRange(Hash, PHashTbl(HashTbl), Result, S, H);
+end;
+
+function zzCaseStringOfVariable(const Value: UnicodeString; const Values: array of UnicodeString): Integer;
+begin
+  for Result := 0 to High(Values) do
+    if Value = Values[Result] then
+      Exit;
+  Result := -1;
+end;
+
+
+{------------------- ANSI STRINGS ---------------------}
+
+function zzInternalCaseStringOfA(const S: RawByteString; HashTbl: Pointer; H: Integer): Integer;
+type
+  zzTCaseStringOfHashItem = record
+    Hash: Cardinal;
+    Value: RawByteString;
+  end;
+
+  PHashTbl = ^THashTbl;
+  THashTbl = array[0..MaxInt div SizeOf(zzTCaseStringOfHashItem) - 1] of zzTCaseStringOfHashItem;
+
+  function HashString(const S: RawByteString): Cardinal;
+  var
+    I: Integer;
+  begin
+    Result := Length(S);
+    if Result > 0 then
+      for I := 0 to Length(S) - 1 do
+        Inc(Result, Ord(S[I + 1]));
+  end;
+
+  function FindIndex(Hash: Cardinal; HashTbl: PHashTbl; H: Integer): Integer;
+  var
+    L, C: Integer;
+  begin
+    L := 0;
+    while L <= H do
+    begin
+      Result := (L + H) shr 1;
+      C := HashTbl[Result].Hash - Hash;
+      if C < 0 then
+        L := Result + 1
+      else
+      begin
+        if C = 0 then
+          Exit;
+        H := Result - 1;
+      end;
+    end;
+    Result := -1;
+  end;
+
+  function FindInRange(Hash: Cardinal; HashTbl: PHashTbl; Index: Integer; const S: RawByteString; H: Integer): Integer;
+  begin
+    for Result := Index - 1 downto 0 do
+      if HashTbl[Result].Hash <> Hash then
+        Break
+      else if HashTbl[Result].Value = S then
+        Exit;
+
+    for Result := Index + 1 to H do
+      if HashTbl[Result].Hash <> Hash then
+        Break
+      else if HashTbl[Result].Value = S then
+        Exit;
+    Result := -1;
+  end;
+
+var
+  Hash: Cardinal;
+begin
+  Hash := HashString(S);
+  Result := FindIndex(Hash, PHashTbl(HashTbl), H);
+  if Result <> -1 then
+    if PHashTbl(HashTbl)[Result].Value <> S then
+      Result := FindInRange(Hash, PHashTbl(HashTbl), Result, S, H);
+end;
+
+function zzCaseStringOfVariableA(const Value: RawByteString; const Values: array of RawByteString): Integer;
+begin
+  for Result := 0 to High(Values) do
+    if Value = Values[Result] then
+      Exit;
+  Result := -1;
+end;
+
+{------------------- WIDE STRINGS ---------------------}
+
+function zzInternalCaseStringOfW(const S: WideString; HashTbl: Pointer; H: Integer): Integer;
+type
+  zzTCaseStringOfHashItem = record
+    Hash: Cardinal;
+    Value: WideString;
+  end;
+
+  PHashTbl = ^THashTbl;
+  THashTbl = array[0..MaxInt div SizeOf(zzTCaseStringOfHashItem) - 1] of zzTCaseStringOfHashItem;
+
+  function HashString(const S: WideString): Cardinal;
+  var
+    I: Integer;
+  begin
+    Result := Length(S);
+    if Result > 0 then
+      for I := 0 to Length(S) - 1 do
+        Inc(Result, Ord(S[I + 1]));
+  end;
+
+  function FindIndex(Hash: Cardinal; HashTbl: PHashTbl; H: Integer): Integer;
+  var
+    L, C: Integer;
+  begin
+    L := 0;
+    while L <= H do
+    begin
+      Result := (L + H) shr 1;
+      C := HashTbl[Result].Hash - Hash;
+      if C < 0 then
+        L := Result + 1
+      else
+      begin
+        if C = 0 then
+          Exit;
+        H := Result - 1;
+      end;
+    end;
+    Result := -1;
+  end;
+
+  function FindInRange(Hash: Cardinal; HashTbl: PHashTbl; Index: Integer; const S: WideString; H: Integer): Integer;
+  begin
+    for Result := Index - 1 downto 0 do
+      if HashTbl[Result].Hash <> Hash then
+        Break
+      else if HashTbl[Result].Value = S then
+        Exit;
+
+    for Result := Index + 1 to H do
+      if HashTbl[Result].Hash <> Hash then
+        Break
+      else if HashTbl[Result].Value = S then
+        Exit;
+    Result := -1;
+  end;
+
+var
+  Hash: Cardinal;
+begin
+  Hash := HashString(S);
+  Result := FindIndex(Hash, PHashTbl(HashTbl), H);
+  if Result <> -1 then
+    if PHashTbl(HashTbl)[Result].Value <> S then
+      Result := FindInRange(Hash, PHashTbl(HashTbl), Result, S, H);
+end;
+
+function zzCaseStringOfVariableW(const Value: WideString; const Values: array of WideString): Integer;
+begin
+  for Result := 0 to High(Values) do
+    if Value = Values[Result] then
+      Exit;
+  Result := -1;
+end;
+
+{$IFDEF _XXX_OVERFLOW_CHECKS_ON}
+  {$Q+}
+  {$UNDEF _XXX_OVERFLOW_CHECKS_ON}
+{$ENDIF}
+
+{$IFDEF _XXX_RANGE_CHECKS_ON}
+  {$R-}
+  {$UNDEF _XXX_RANGE_CHECKS_ON}
+{$ENDIF}

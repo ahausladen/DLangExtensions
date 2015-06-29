@@ -1,0 +1,144 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{ba1c04fd-2a51-4877-a969-c7cc9eb44f87}</ProjectGuid>
+			<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+			<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+			<DCC_DependencyCheckOutputName>..\bin\DLangExtensions.dll</DCC_DependencyCheckOutputName>
+			<MainSource>DLangExtensions.dpr</MainSource>
+			<ProjectVersion>12.0</ProjectVersion>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Basis' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<UsePackages>true</UsePackages>
+			<DCC_CVT_NARROWING_STRING_LOST>true</DCC_CVT_NARROWING_STRING_LOST>
+			<DCC_CVT_WIDENING_STRING_LOST>true</DCC_CVT_WIDENING_STRING_LOST>
+			<DCC_Define>DLANGEXTENSIONS;$(DCC_Define)</DCC_Define>
+			<DCC_ExeOutput>..\bin</DCC_ExeOutput>
+			<DCC_BplOutput>..\bin</DCC_BplOutput>
+			<DCC_WIDECHAR_REDUCED>false</DCC_WIDECHAR_REDUCED>
+			<DCC_ImageBase>41400000</DCC_ImageBase>
+			<DCC_DcuOutput>..\lib</DCC_DcuOutput>
+			<DCC_DcpOutput>..\lib</DCC_DcpOutput>
+			<DCC_DependencyCheckOutputName>..\bin\DLangExtensions.dll</DCC_DependencyCheckOutputName>
+			<DCC_UsePackage>rtl</DCC_UsePackage>
+			<GenDll>true</GenDll>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<Version>7.0</Version>
+			<DCC_DebugInformation>False</DCC_DebugInformation>
+			<DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<DCC_MapFile>3</DCC_MapFile>
+			<Version>7.0</Version>
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+			<DCC_ObjOutput>..\lib</DCC_ObjOutput>
+			<DCC_HppOutput>..\lib</DCC_HppOutput>
+		</PropertyGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Delphi.Personality>
+					<Parameters>
+						<Parameters Name="UseLauncher">False</Parameters>
+						<Parameters Name="LoadAllSymbols">True</Parameters>
+						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+						<Parameters Name="RunParams">-pDelphi -rBDSPlain</Parameters>
+						<Parameters Name="HostApplication">$(BDS)\Bin\bds.exe</Parameters>
+					</Parameters>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+						<VersionInfo Name="MajorVer">2</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">1</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">True</VersionInfo>
+						<VersionInfo Name="Locale">1031</VersionInfo>
+						<VersionInfo Name="CodePage">1252</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription">Delphi Language Extensions</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">2.0.0.1</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName">DLangExtensions</VersionInfoKeys>
+						<VersionInfoKeys Name="LegalCopyright">(C) 2007-2008 Andreas Hausladen</VersionInfoKeys>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename">DLangExtensions.dll</VersionInfoKeys>
+						<VersionInfoKeys Name="ProductName">DLangExtensions</VersionInfoKeys>
+						<VersionInfoKeys Name="ProductVersion">2.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+					</VersionInfoKeys>
+					<Source>
+						<Source Name="MainSource">DLangExtensions.dpr</Source>
+					</Source>
+					<Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\bcbofficexp120.bpl">CodeGear C++Builder Office XP-Server-Package</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\bcboffice2k120.bpl">CodeGear C++Builder Office 2000-Server-Package</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dcloffice2k120.bpl">Microsoft Office 2000 Beispiele für gekapselte Komponenten für Automation Server</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclofficexp120.bpl">Microsoft Office XP Beispiele für gekapselte Komponenten für Automation Server</Excluded_Packages>
+					</Excluded_Packages>
+				</Delphi.Personality>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+		<ItemGroup>
+			<DelphiCompile Include="DLangExtensions.dpr">
+				<MainSource>MainSource</MainSource>
+			</DelphiCompile>
+			<DCCReference Include="LangExtIntf.pas"/>
+			<DCCReference Include="Shared\CompileInterceptor\InterceptIntf.pas"/>
+			<DCCReference Include="Shared\CompileInterceptor\InterceptLoader.pas"/>
+			<DCCReference Include="Shared\DelphiExpr.pas"/>
+			<DCCReference Include="Shared\DelphiLexer.pas"/>
+			<DCCReference Include="Shared\DelphiParserContainers.pas"/>
+			<DCCReference Include="Shared\DelphiPreproc.pas"/>
+			<DCCReference Include="Shared\Utf8StringUtils.pas"/>
+			<DCCReference Include="Shared\IDEHooks.pas"/>
+			<DCCReference Include="Utils.pas"/>
+			<DCCReference Include="Macros\Macros.pas"/>
+			<DCCReference Include="LanguageExtension.pas"/>
+			<DCCReference Include="LangExtRegister.pas"/>
+			<DCCReference Include="DLangExtCompiler.pas"/>
+			<DCCReference Include="DelphiLexerUtils.pas"/>
+			<DCCReference Include="LexerImplInclude.pas"/>
+			<DCCReference Include="MultilineStrings\MultilineStrings.pas"/>
+			<DCCReference Include="ForIn\ForInExtension.pas"/>
+			<DCCReference Include="CaseStringOf\CaseStringOfExtension.pas"/>
+			<DCCReference Include="PluginExtensions\PluginExtensions.pas"/>
+			<DCCReference Include="UniSwitch\UniSwitchExtension.pas"/>
+			<BuildConfiguration Include="Basis">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
+	</Project>
