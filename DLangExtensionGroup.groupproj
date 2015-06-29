@@ -12,9 +12,6 @@
 			<Projects Include="Source\Tools\Dcc32le\Dcc32le.dproj">
 				<Dependencies/>
 			</Projects>
-			<Projects Include="..\CompileInterceptor\Source\CompileInterceptorW.dproj">
-				<Dependencies/>
-			</Projects>
 		</ItemGroup>
 		<ProjectExtensions>
 			<Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -52,23 +49,14 @@
 		<Target Name="Dcc32le:Make">
 			<MSBuild Targets="Make" Projects="Source\Tools\Dcc32le\Dcc32le.dproj"/>
 		</Target>
-		<Target Name="CompileInterceptorW">
-			<MSBuild Projects="..\CompileInterceptor\Source\CompileInterceptorW.dproj"/>
-		</Target>
-		<Target Name="CompileInterceptorW:Clean">
-			<MSBuild Targets="Clean" Projects="..\CompileInterceptor\Source\CompileInterceptorW.dproj"/>
-		</Target>
-		<Target Name="CompileInterceptorW:Make">
-			<MSBuild Targets="Make" Projects="..\CompileInterceptor\Source\CompileInterceptorW.dproj"/>
-		</Target>
 		<Target Name="Build">
-			<CallTarget Targets="DLangExtensions;DLangExt;Dcc32le;CompileInterceptorW"/>
+			<CallTarget Targets="DLangExtensions;DLangExt;Dcc32le"/>
 		</Target>
 		<Target Name="Clean">
-			<CallTarget Targets="DLangExtensions:Clean;DLangExt:Clean;Dcc32le:Clean;CompileInterceptorW:Clean"/>
+			<CallTarget Targets="DLangExtensions:Clean;DLangExt:Clean;Dcc32le:Clean"/>
 		</Target>
 		<Target Name="Make">
-			<CallTarget Targets="DLangExtensions:Make;DLangExt:Make;Dcc32le:Make;CompileInterceptorW:Make"/>
+			<CallTarget Targets="DLangExtensions:Make;DLangExt:Make;Dcc32le:Make"/>
 		</Target>
 		<Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 	</Project>
